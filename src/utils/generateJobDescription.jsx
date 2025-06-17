@@ -1,25 +1,24 @@
 
-// Helper function to remove <think> ... </think> tags
-export function removeThinkTags(text) {
-  return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-}
+// // Helper function to remove <think> ... </think> tags
+// export function removeThinkTags(text) {
+//   return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+// }
 
 export async function generateJobDescription(prompt) {
   try {
     const res = await fetch(
-      'https://router.huggingface.co/sambanova/v1/chat/completions',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAtHVqVFEvg9teOcBVXnFZJjgaY9ZD6KtU',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer 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',
         },
         body: JSON.stringify({
-          model: 'DeepSeek-R1',
-          messages: [
+          contents: [
             {
-              role: 'user',
-              content: `Based on this job requirements: "${prompt}"
+              parts: [
+                {
+                  text: `Based on this job requirements: "${prompt}"
 
 Please generate a detailed job description with the following sections in plain text format:
 
@@ -33,6 +32,8 @@ SKILLS: [List required skills separated by commas]
 SEARCH_TAGS: [List relevant search tags separated by commas]
 
 Use only plain text, no brackets, no curly braces, no JSON formatting. Keep descriptions natural and readable.`,
+                },
+              ],
             },
           ],
         }),
@@ -42,12 +43,11 @@ Use only plain text, no brackets, no curly braces, no JSON formatting. Keep desc
     const data = await res.json();
     console.log('API Response:', data);
 
-    const raw = data.choices?.[0]?.message?.content || 'No response';
-    const cleaned = removeThinkTags(raw);
-    console.log('Clean AI Response:', cleaned);
+    const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    console.log('Clean AI Response:', raw);
 
     // Parse sections
-    const lines = cleaned.split('\n').map(line => line.trim()).filter(Boolean);
+    const lines = raw.split('\n').map(line => line.trim()).filter(Boolean);
 
     let title = 'Generated Position';
     let location = 'Remote';
