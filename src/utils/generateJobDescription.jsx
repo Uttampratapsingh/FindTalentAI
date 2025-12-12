@@ -7,7 +7,7 @@
 export async function generateJobDescription(prompt) {
   try {
     const res = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAtHVqVFEvg9teOcBVXnFZJjgaY9ZD6KtU',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyCzOlCXXOWXkIBO4Ia1e0tE5soNZVcSrhI',
       {
         method: 'POST',
         headers: {
